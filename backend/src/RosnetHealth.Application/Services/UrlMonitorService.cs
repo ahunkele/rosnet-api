@@ -32,7 +32,7 @@ public class UrlMonitorService(
 
     public async Task<IReadOnlyList<UrlStatusDto>> GetUrlsAsync()
     {
-        var urls = await urlRepository.GetAllActiveAsync();
+        var urls = await urlRepository.GetAllAsync();
         var latestChecks = await healthCheckRepository.GetLatestForAllAsync(urls.Select(u => u.Id));
         var latestByUrlId = latestChecks.ToDictionary(c => c.MonitoredUrlId);
 

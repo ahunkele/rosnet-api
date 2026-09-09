@@ -47,6 +47,17 @@ public class MonitoredUrlRepositoryTests : IDisposable
     }
 
     [Fact]
+    public async Task GetAllAsync_IncludesActiveAndInactiveUrls()
+    {
+        await _sut.AddAsync(new MonitoredUrlEntity { Name = "Active", Url = "https://active.example", IsActive = true });
+        await _sut.AddAsync(new MonitoredUrlEntity { Name = "Paused", Url = "https://paused.example", IsActive = false });
+
+        var all = await _sut.GetAllAsync();
+
+        Assert.Equal(2, all.Count);
+    }
+
+    [Fact]
     public async Task GetAllActiveAsync_ExcludesInactiveUrls()
     {
         await _sut.AddAsync(new MonitoredUrlEntity { Name = "Active", Url = "https://active.example", IsActive = true });

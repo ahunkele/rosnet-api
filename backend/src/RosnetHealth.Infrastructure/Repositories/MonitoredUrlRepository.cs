@@ -10,6 +10,9 @@ public class MonitoredUrlRepository(AppDbContext context) : IMonitoredUrlReposit
     public Task<MonitoredUrlEntity?> GetByIdAsync(int id) =>
         context.MonitoredUrls.FirstOrDefaultAsync(u => u.Id == id);
 
+    public async Task<IReadOnlyList<MonitoredUrlEntity>> GetAllAsync() =>
+        await context.MonitoredUrls.ToListAsync();
+
     public async Task<IReadOnlyList<MonitoredUrlEntity>> GetAllActiveAsync() =>
         await context.MonitoredUrls.Where(u => u.IsActive).ToListAsync();
 

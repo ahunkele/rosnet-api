@@ -27,7 +27,7 @@ public class UrlMonitorServiceTests
         var uncheckedUrl = new MonitoredUrlEntity { Id = 2, Name = "Unchecked", Url = "https://unchecked.example" };
         var latestCheck = HealthCheckEntity.Create(checkedUrl.Id, DateTime.UtcNow, 200, 50);
 
-        _urlRepository.Setup(r => r.GetAllActiveAsync())
+        _urlRepository.Setup(r => r.GetAllAsync())
             .ReturnsAsync([checkedUrl, uncheckedUrl]);
         _healthCheckRepository.Setup(r => r.GetLatestForAllAsync(It.IsAny<IEnumerable<int>>()))
             .ReturnsAsync([latestCheck]);
@@ -40,6 +40,20 @@ public class UrlMonitorServiceTests
         var uncheckedDto = Assert.Single(result, dto => dto.Id == uncheckedUrl.Id);
         Assert.Null(uncheckedDto.Status);
         Assert.Null(uncheckedDto.LastCheckedAt);
+    }
+
+    [Fact]
+    public async Task GetUrlsAsync_IncludesPausedUrls()
+    {
+        var pausedUrl = new MonitoredUrlEntity { Id = 1, Name = "Paused", Url = "https://paused.example", IsActive = false };
+
+        _urlRepository.Setup(r => r.GetAllAsync()).ReturnsAsync([pausedUrl]);
+        _healthCheckRepository.Setup(r => r.GetLatestForAllAsync(It.IsAny<IEnumerable<int>>())).ReturnsAsync([]);
+
+        var result = await _sut.GetUrlsAsync();
+
+        var dto = Assert.Single(result);
+        Assert.False(dto.IsActive);
     }
 
     [Fact]
