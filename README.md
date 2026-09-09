@@ -104,3 +104,6 @@ Roughly in priority order:
 9. **Real-time updates.** The UI polls every 5 seconds; a `HealthCheckEntity` insert could instead push over SignalR so the dashboard updates the instant a check completes, rather than up to 5 seconds later.
 
 10. **Response-body assertions and configurable retry/backoff** — both explicitly bonus scope per the brief, but the natural next step for making the "is it up" signal richer than status-code-only.
+
+## References 
+https://docs.google.com/document/d/1Ra21O8kFNV3Mn5ouCuOxSlTqqQYEAN-ivRIlJVpBJQs/edit?usp=sharing
