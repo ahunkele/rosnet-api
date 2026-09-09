@@ -5,6 +5,7 @@ backend/**/*.user
 *.db
 *.db-shm
 *.db-wal
+*.log
 
 # Node / frontend
 frontend/node_modules/
